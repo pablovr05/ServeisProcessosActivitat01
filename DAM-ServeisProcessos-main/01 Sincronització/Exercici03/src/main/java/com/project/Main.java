@@ -1,27 +1,20 @@
 package com.project;
 
-import java.util.concurrent.Semaphore;
-import com.project.LongRunningTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
-
-    private static final Semaphore semaphore = new Semaphore(0); 
-
     public static void main(String[] args) {
+        final int capacidad = 3;
+        WebPage webPage = new WebPage(capacidad);
 
-        System.out.println("Llançant LongRunningTask...");
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
 
-        // Llançar la tasca de duració indeterminada
-        LongRunningTask task = new LongRunningTask(semaphore);
-        task.start();
-
-        try {
-            // Intentar adquirir el semàfor. Això bloquejarà fins que la tasca alliberi el semàfor.
-            System.out.println("Esperant que LongRunningTask acabi...");
-            semaphore.acquire();  // Esperar fins que el fil alliberi el semàfor
-            System.out.println("LongRunningTask ha alliberat el semàfor. Continuant amb l'execució.");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        for (int i = 1; i <= 10; i++) {
+            String nombreUsuario = "Usuario " + i;
+            executorService.submit(new Usuario(webPage, nombreUsuario));
         }
+
+        executorService.shutdown();
     }
 }

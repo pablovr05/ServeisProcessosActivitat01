@@ -1,14 +1,13 @@
 package com.project;
 
 import java.util.concurrent.Semaphore;
-import java.io.InterruptedIOException;
 
-public class Semaphore {
+public class ParkingLot {
 
     private final Semaphore semaphore;
 
-    public parkingSlot(int capacity) {
-        this.semaphore = new Semaphore(capacity);
+    public ParkingLot(int capacidad) {
+        this.semaphore = new Semaphore(capacidad);
     }
 
     public void enter(String nom) {
